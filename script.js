@@ -1,6 +1,7 @@
 const mainContainer = document.querySelector('#container');
 const body = document.querySelector('body');
 const grids = document.querySelectorAll('.grid-div');
+const sizeBtn = document.querySelector('#size-button');
 
 const randomRgb = () => {
     const r = Math.floor(Math.random() * 256);
@@ -26,11 +27,14 @@ const out = (event) => {
     }
 }
 
-const gridDefault = (rows, cols) => {
+const gridGenerator = (rows, cols) => {
     for(i = 0; i < rows; i++) {
         for(j = 0; j < cols; j++) {
             const row = document.createElement("div");
+            const size = 480 / rows;
             row.classList.add('grid-div');
+            row.style.width = `${size}px`;
+            row.style.height = `${size}px`;
             row.addEventListener('mouseover', over);
             row.addEventListener('mouseout', out);
             mainContainer.appendChild(row);
@@ -38,6 +42,22 @@ const gridDefault = (rows, cols) => {
     }
 }
 
+const clearGrid = () => {
+    while(mainContainer.firstChild) {
+        mainContainer.firstChild.remove();
+    }
+}
 
 
-gridDefault(16, 16);
+sizeBtn.addEventListener('click', () => {
+    let userInput;
+    do {
+        userInput = prompt('Enter a size between 1 and 100');
+        if(userInput === null) return;
+    } while(Number(userInput) > 100 || Number(userInput) <= 0);
+    
+    clearGrid();
+    gridGenerator(userInput, userInput);
+})
+
+gridGenerator(16, 16);
